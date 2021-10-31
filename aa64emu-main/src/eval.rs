@@ -84,7 +84,7 @@ pub fn run(ops: &[Op]) -> Context {
     }
 }
 
-fn eval_arith(ctx: &mut ctx, opcode: &ArithOpcode, reg1: &Register, reg2: &Register, reg3: &Register) {
+fn eval_arith(ctx: &mut Context, opcode: &ArithOpcode, reg1: &Register, reg2: &Register, reg3: &Register) {
     // ここを実装　算術演算の実装　add,sub,mul,div
     match opcode {
         //代入はctx.set_reg(dst, n);なのではという
@@ -105,13 +105,13 @@ fn eval_arith(ctx: &mut ctx, opcode: &ArithOpcode, reg1: &Register, reg2: &Regis
         ArithOpcode::Div => {
             let r2 = ctx.get_reg(reg2);
             let r3 = ctx.get_reg(reg3);
-            ctx.set_reg(reg1, r2*r3);
+            ctx.set_reg(reg1, r2/r3);
         
         } 
         ArithOpcode::Mul => {
             let r2 = ctx.get_reg(reg2);
             let r3 = ctx.get_reg(reg3);
-            ctx.set_reg(reg1, r2/r3);
+            ctx.set_reg(reg1, r2*r3);
             
         } 
     }
@@ -126,13 +126,14 @@ fn eval_cmp(ctx: &mut Context, reg1: &Register, reg2: &Register) {
     let r1 = ctx.get_reg(reg1);
     let r2 = ctx.get_reg(reg2);
 
-    let val = r1-r2
-
-    if val == 0 {
-        ctx.cond == Condition::Eq
+    if r1 == r2 {
+        ctx.cond = Condition::Eq ;
     
-    }else if val < 0 {
-        ctx.cond == Condition::Lt
+    }else if r1 < r2 {  
+        ctx.cond = Condition::Lt ;
+    
+    }else{
+        ctx.cond = Condition::Gt ;
     }
 }
 
